@@ -16,13 +16,15 @@ BuildRequires:  python2-devel
 Requires:       python
 Requires:       yum-utils
 
+
 %description
 yum-plugin-needs-restarting is a YUM plugin for listing processes using
 old files after upgrading your system. It is based on the code of
 needs-restarting which is part of the yum-utils package.
 
 %prep
-%setup -qn %{name}-%{commit}
+%setup -q -n %{name}-%{version}
+cp -a LICENSE COPYING
 
 %build
 # This is a python script
@@ -30,20 +32,20 @@ needs-restarting which is part of the yum-utils package.
 %install
 install -Dm 644 needs-restarting.conf %{buildroot}/%{_sysconfdir}/yum/pluginconf.d/needs-restarting.conf
 install -Dm 755 needs-restarting.py %{buildroot}/%pluginhome/needs-restarting.py
-%{__python} -c "import compileall; compileall.compile_dir('%{buildroot}/%pluginhome', 1)"
 
 %clean
 rm -rf %{buildroot}
 
 %files
-%defattr(-, root, root)
-%doc COPYING README.md
+%license COPYING
+%doc README.md
 %config(noreplace) %{_sysconfdir}/yum/pluginconf.d/needs-restarting.conf
-%{pluginhome}/needs-restarting.py
-%{pluginhome}/needs-restarting.pyo
-%{pluginhome}/needs-restarting.pyc
-
+%{pluginhome}/needs-restarting.py*
 
 %changelog
+* Tue Jan 27 2015 Michael Spahn <any0n3@fedoraproject.org>
+- Fix serveral issues
+
 * Wed Dec  3 2014 Michael Spahn <any0n3@fedoraproject.org>
 - Initial spec file
+
